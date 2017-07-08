@@ -1,0 +1,20 @@
+# provides parameters for GA
+
+
+#format:
+##name
+##lower border
+##higher border
+
+
+# ----------- Parameters -----------#
+A
+0.0                  
+1.0
+                                    
+B               
+0.0               
+1.0
+
+# ----------- Parameters -----------#
+
