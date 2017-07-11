@@ -64,12 +64,15 @@ class Parameters:
 class Entity:
     
     def __init__(self):
+        self.chromlen=10          # integer: length of chromosomes
+        self.mutprob=0.01   # float (<=1): mutation probability
+
         self.fit=0.0
         self.genome=[]
 
         
     def buildGenome(self):
-        for i in range(0, (nochrom*chromlen)):
+        for i in range(0, (nochrom*self.chromlen)):
             self.genome.append(calc.flip())
         
 
@@ -77,14 +80,14 @@ class Entity:
         x=calc.bin_dec(chrom)
         hi=parameter[chromID].hi
         lo=parameter[chromID].lo
-        y=(((hi-lo)*x)/((2**chromlen-1))+lo)
+        y=(((hi-lo)*x)/((2**self.chromlen-1))+lo)
         return y
 
     def decodeGenome(self):
         chromID=0
         param={}
         for i in range(0, nochrom):
-            chrom=self.genome[chromID*chromlen:(chromID+1)*chromlen]
+            chrom=self.genome[chromID*self.chromlen:(chromID+1)*self.chromlen]
             dechrom=self.decodeChrom(chrom, chromID)
             param[ parameter[chromID].name ]= dechrom
             chromID+=1
@@ -104,7 +107,7 @@ class Entity:
 
     def mutate(self):
         for i in range(0, len(self.genome)):
-            if calc.decide(mutprob):
+            if calc.decide(self.mutprob):
                 if self.genome[i]==1:
                     self.genome[i]=0
                 elif self.genome[i]==0:
@@ -115,6 +118,9 @@ class Entity:
 class Population:
     
     def __init__(self,nopopulation):
+        self.crossprob=0.6  # float (<=1): crossover probability
+        self.floodfactor=0.85     # float (<=1): fitness scaling with avg
+
         self.avgFit=0.0
         self.maxFit=0.0
         self.minFit=0.0
@@ -184,7 +190,7 @@ class Population:
             
         gendummy=[]
         for i in range(0, (len(self.indiv)-1), 2):
-                if calc.decide(crossprob):
+                if calc.decide(self.crossprob):
                     cross=calc.rangeint(1, len(self.indiv[0].genome)-1)
                 else:
                     cross=0
@@ -210,8 +216,8 @@ class Population:
         probs=[]
         for i in range(0, self.maxpop):
             if self.sumFit>0:
-                scaledIndivFit=(self.indiv[i].fit-(floodfactor*self.avgFit))
-                scaledSumFit=(self.sumFit-(floodfactor*self.avgFit*self.maxpop))
+                scaledIndivFit=(self.indiv[i].fit-(self.floodfactor*self.avgFit))
+                scaledSumFit=(self.sumFit-(self.floodfactor*self.avgFit*self.maxpop))
                 if scaledIndivFit<0:
                     scaledSumFit+=abs(scaledIndivFit)
                     scaledIndivFit=0
