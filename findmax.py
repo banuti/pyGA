@@ -2,29 +2,19 @@
 #GA main program
 
 from pyGA import *
-
-
-
-# def F(param):
-
-#     A=param['A']
-#     B=param['B']
-    
-#     f=(A**2 + B**2)/2.0
-
-#     return f
     
 
-
-population = 1000
+# set world constants
+population  = 100
 generations = 1000
 
+# create world with given number of generations 
+# and number of entities per generation
 world1=World(population,generations)
 
+# run optimization
 world1.runworld()
-   
+
+# show final results
 world1.showreport()
 
-
-
-# TODO 
